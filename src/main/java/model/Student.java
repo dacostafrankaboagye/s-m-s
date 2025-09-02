@@ -51,5 +51,5 @@ public class Student {
      * <p>Allows storing custom metadata (e.g., "nationality", "guardianName")
      * without modifying the core model. Keys and values are both Strings.</p>
      */
-    private Map<String, String> attributes = new HashMap<>();
+    private Map<String, String> attributes = new HashMap<>(); // for flexible key/value profile fields.
 }
