@@ -54,6 +54,14 @@ indexing, caches and job queues while being modular so persistence or a real DB 
     - Student, Course, Enrollment, Instructor, Department, TimeSlot.
 
 
+- Reasons for certain decisions:
+  - `TreeSet<TimeSlot>` -> uses compareTo to maintain natural ordering
+      - so Ordering logic:
+        - Sort by DayOfWeek (MONDAY → SUNDAY).
+        - If same day, sort by startTime.
+        - If same start, sort by endTime.
+  - `HashSet<String>` -> ensures no duplicate course assignments + constant-time lookups.
+
 ### Directory Structure
 
 ```text
