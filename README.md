@@ -1,16 +1,28 @@
 ### 1) Problem statement (concise & precise)
 
-A mid-sized university needs a reliable in-memory Student Management System to manage student records, 
+A mid-sized university needs a reliable in-memory Student Management System to manage 
+- student records, 
+- course catalog, 
+- enrollments, 
+- timetables, 
+- grades, 
+- attendance, and 
+- reporting. 
 
-course catalog, enrollments, timetables, grades, attendance, and reporting. The system must support fast searches, 
+The system must support 
+- fast searches, 
+- complex queries (e.g., find students by partial name, students in a course, top N by GPA), 
+- concurrent access (multiple services/threads), 
+- background jobs (notifications & reports), and 
+- provide export/import to files. 
 
-complex queries (e.g., find students by partial name, students in a course, top N by GPA), concurrent access (multiple services/threads), 
+The core implementation must **demonstrate use of the Java Collections Framework** for 
+- storage, 
+- indexing, 
+- caches and 
+- job queues 
 
-background jobs (notifications & reports), and provide export/import to files. The core implementation 
-
-must **demonstrate use of the Java Collections Framework** for storage, 
-
-indexing, caches and job queues while being modular so persistence or a real DB can be added later.
+- while being modular so persistence or a real DB can be added later.
 
 ---
 
@@ -61,6 +73,14 @@ indexing, caches and job queues while being modular so persistence or a real DB 
         - If same day, sort by startTime.
         - If same start, sort by endTime.
   - `HashSet<String>` -> ensures no duplicate course assignments + constant-time lookups.
+
+- repository design
+  - StudentRepository
+    - responsibilities that I have identified
+      - Create and store students. 
+      - Fetch by ID. 
+      - Search by name tokens. 
+      - Delete students with index cleanup
 
 ### Directory Structure
 
