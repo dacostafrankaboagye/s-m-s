@@ -75,12 +75,17 @@ The core implementation must **demonstrate use of the Java Collections Framework
   - `HashSet<String>` -> ensures no duplicate course assignments + constant-time lookups.
 
 - repository design
-  - StudentRepository
+  - `StudentRepository`
     - responsibilities that I have identified
       - Create and store students. 
       - Fetch by ID. 
       - Search by name tokens. 
       - Delete students with index cleanup
+  - `EnrollmentRepository`
+    - ConcurrentHashMap -> thread-safe access to main maps.
+    - CopyOnWriteArrayList -> safe iteration for read-heavy operations (enrollments per student).
+    - ConcurrentHashMap.newKeySet() -> lock-free thread-safe set for quick student membership per course.
+    - EnumMap inside Enrollment -> efficient for GradeType enum keys.
 
 ### Directory Structure
 
@@ -100,7 +105,9 @@ The core implementation must **demonstrate use of the Java Collections Framework
       StudentRepository.java
       InMemoryStudentRepository.java
       CourseRepository.java
+      InMemoryCourseRepository.java
       EnrollmentRepository.java
+      InMemoryEnrollmentRepository.java
     /service
       StudentService.java
       CourseService.java
