@@ -1,4 +1,4 @@
-### 1) Problem statement (concise & precise)
+### 1) Problem statement 
 
 A mid-sized university needs a reliable in-memory Student Management System to manage 
 - student records, 
@@ -86,6 +86,10 @@ The core implementation must **demonstrate use of the Java Collections Framework
     - CopyOnWriteArrayList -> safe iteration for read-heavy operations (enrollments per student).
     - ConcurrentHashMap.newKeySet() -> lock-free thread-safe set for quick student membership per course.
     - EnumMap inside Enrollment -> efficient for GradeType enum keys.
+  - `DepartmentRepository`
+    - ConcurrentHashMap -> Fast concurrent reads/writes for departmentsById. 
+    - TreeSet ->  Maintains sorted department IDs for listAll() without extra sorting. 
+    - SynchronizedSet wrapper ->  Ensures thread safety for departmentIds.
 
 ### Directory Structure
 
