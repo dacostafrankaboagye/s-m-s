@@ -156,7 +156,7 @@ erDiagram
     }
 ```
 
-### 🔧 Key Collections Framework Usage
+### Key Collections Framework Usage
 
 - **ConcurrentHashMap** - Thread-safe primary storage in repositories
 - **TreeSet** - Sorted time slots and department IDs
@@ -186,7 +186,7 @@ src/test/java/
 └── util/           # Utility unit tests 
 ```
 
-### 🎯 Core Features
+### Core Features
 
 - **Student Management**: Registration, search by name tokens, contact updates
 - **Course Catalog**: Course creation, department-based listing
