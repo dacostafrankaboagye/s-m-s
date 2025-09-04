@@ -1,7 +1,6 @@
 package model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -20,6 +19,9 @@ import java.util.HashMap;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
 
     /** Unique identifier for the student (e.g., UUID or institutional ID). */

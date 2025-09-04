@@ -1,9 +1,6 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +26,7 @@ import java.util.TreeSet;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Course {
     /** Unique course code (e.g., "CS101"). */
     private String code;

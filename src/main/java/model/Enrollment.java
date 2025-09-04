@@ -1,9 +1,6 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -11,8 +8,9 @@ import java.util.Map;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@RequiredArgsConstructor
 public class Enrollment {
     /** Unique identifier of the student. */
     private String studentId;

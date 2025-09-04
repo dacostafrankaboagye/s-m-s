@@ -1,103 +1,99 @@
-### 1) Problem statement 
+# Student Management System (SMS)
 
-A mid-sized university needs a reliable in-memory Student Management System to manage 
-- student records, 
-- course catalog, 
-- enrollments, 
-- timetables, 
-- grades, 
-- attendance, and 
-- reporting. 
+## Overview
 
-The system must support 
-- fast searches, 
-- complex queries (e.g., find students by partial name, students in a course, top N by GPA), 
-- concurrent access (multiple services/threads), 
-- background jobs (notifications & reports), and 
-- provide export/import to files. 
+An in-memory Student Management System demonstrating extensive use of Java Collections Framework for managing student records, courses, enrollments, and departments in a university setting.
 
-The core implementation must **demonstrate use of the Java Collections Framework** for 
-- storage, 
-- indexing, 
-- caches and 
-- job queues 
+## Current Implementation Status
 
-- while being modular so persistence or a real DB can be added later.
+### ✅ Implemented Components
 
----
+#### Models
+- **Student** - Student records with enrollments and attributes
+- **Course** - Course catalog with prerequisites and time slots
+- **Enrollment** - Student-course enrollments with grades and attendance
+- **Department** - Academic departments
+- **Instructor** - Faculty information
+- **Notification** - System notifications
+- **TimeSlot** - Scheduled class times
+- **Enums**: EnrollmentStatus, GradeType
+- **DTOs**: StudentGpa
 
-### 2) High-level goals & scope
+#### Repositories (In-Memory)
+- **StudentRepository** & **InMemoryStudentRepository** - Student data management
+- **CourseRepository** & **InMemoryCourseRepository** - Course catalog management
+- **EnrollmentRepository** & **InMemoryEnrollmentRepository** - Enrollment tracking
+- **DepartmentRepository** & **InMemoryDepartmentRepository** - Department management
+- **InstructorRepository** & **InMemoryInstructorRepository** - Instructor management
+- **NotificationRepository** & **InMemoryNotificationRepository** - Notification handling
 
-- Maintain student, course, instructor, department, semester and enrollment data in-memory.
-- Support CRUD, bulk import/export, complex searches, ranked queries (top students), timetable conflict detection, prerequisite/graph checks, and attendance analytics.
-- Use Collections extensively: Lists, Sets, Queues/Deques, Maps (various implementations), PriorityQueue, BitSet, and concurrent collections.
-- Build a clean separation: model → repository (in-memory) → services → controllers/CLI.
-- Provide testable APIs and thorough unit & performance tests.
+#### Services
+- **StudentService** & **StudentServiceImpl** - Student business logic
+- **CourseService** & **CourseServiceImpl** - Course operations
+- **EnrollmentService** & **EnrollmentServiceImpl** - Enrollment management
+- **DepartmentService** & **DepartmentServiceImpl** - Department operations
 
----
+#### Utilities
+- **GPAUtils** - GPA calculation and grade conversion
+- **StringUtils** - String tokenization for search
 
-### 3) Functional requirements
+#### Tests
+- ✅ Complete unit tests for all model classes
+- ✅ Complete unit tests for all repository implementations
+- ✅ Complete unit tests for utility classes (GPAUtils, StringUtils)
+- ❌ Missing: Service layer tests
 
-- Create/read/update/delete Students, Courses, Instructors, Departments, Semesters.
-- Enroll/unenroll students in courses (per semester).
-- Search students by id/name/email/attribute (fast).
-- Indexes for fast lookup: by id, by name tokens, by course, by department.
-- Grade recording and GPA calculation.
-- Attendance tracking per student-per-course.
-- Timetable generation & conflict detection.
-- Reports: top N students per semester, course roster, attendance summary, grade distribution.
-- Background tasks: email notifications queue, nightly analytics job.
-- Import/export CSV or JSON.
+### 🔧 Key Collections Framework Usage
 
----
+- **ConcurrentHashMap** - Thread-safe primary storage in repositories
+- **TreeSet** - Sorted time slots and department IDs
+- **LinkedHashSet** - Ordered student enrollments
+- **HashSet** - Course prerequisites and fast lookups
+- **EnumMap** - Efficient grade storage by GradeType
+- **BitSet** - Compact attendance tracking
+- **CopyOnWriteArrayList** - Read-heavy enrollment lists
+- **Collections.synchronizedSet** - Thread-safe department ID sets
 
-### 4) Non-functional requirements
+### 📁 Project Structure
 
-- Support up to ~50k students, ~2k courses (example target).
-- Read-heavy operations must be optimized; some write concurrency expected.
-- Expose interfaces for future persistence (DB) swap-in.
-- Thread-safety for repositories used by multiple threads.
+```
+src/main/java/
+├── api/            # API layer (placeholder)
+├── jobs/           # Background jobs (placeholder)
+├── model/          # Domain models and DTOs
+│   └── dto/        # Data Transfer Objects
+├── repository/     # Data access layer interfaces and implementations
+├── service/        # Business logic layer interfaces and implementations
+└── util/           # Utility classes (GPAUtils, StringUtils)
 
----
+src/test/java/
+├── model/          # Model unit tests ✅
+├── repository/     # Repository unit tests ✅
+├── service/        # Service unit tests ✅
+└── util/           # Utility unit tests ✅
+```
 
-## Solution
+### 🎯 Core Features
 
-- model classes:
-    - Student, Course, Enrollment, Instructor, Department, TimeSlot.
+- **Student Management**: Registration, search by name tokens, contact updates
+- **Course Catalog**: Course creation, department-based listing
+- **Enrollment System**: Student-course enrollment/dropping with semester tracking
+- **Department Management**: Department CRUD operations
+- **Grade Tracking**: Multiple grade types with GPA calculation
+- **Attendance Tracking**: BitSet-based efficient attendance records
+- **Thread Safety**: Concurrent access support across all repositories
 
+## Technology Stack
 
-- Reasons for certain decisions:
-  - `TreeSet<TimeSlot>` -> uses compareTo to maintain natural ordering
-      - so Ordering logic:
-        - Sort by DayOfWeek (MONDAY → SUNDAY).
-        - If same day, sort by startTime.
-        - If same start, sort by endTime.
-  - `HashSet<String>` -> ensures no duplicate course assignments + constant-time lookups.
+- **Java 21**
+- **Maven** - Build management
+- **Lombok** - Boilerplate code reduction
+- **JUnit 5** - Unit testing
+- **AssertJ** - Fluent assertions
 
-- repository design
-  - `StudentRepository`
-    - responsibilities that I have identified
-      - Create and store students. 
-      - Fetch by ID. 
-      - Search by name tokens. 
-      - Delete students with index cleanup
-  - `EnrollmentRepository`
-    - ConcurrentHashMap -> thread-safe access to main maps.
-    - CopyOnWriteArrayList -> safe iteration for read-heavy operations (enrollments per student).
-    - ConcurrentHashMap.newKeySet() -> lock-free thread-safe set for quick student membership per course.
-    - EnumMap inside Enrollment -> efficient for GradeType enum keys.
-  - `DepartmentRepository`
-    - ConcurrentHashMap -> Fast concurrent reads/writes for departmentsById. 
-    - TreeSet ->  Maintains sorted department IDs for listAll() without extra sorting. 
-    - SynchronizedSet wrapper ->  Ensures thread safety for departmentIds.
-  - `InstructorRepository`
-    - ConcurrentHashMap -> instructorsById (thread-safe ID lookups)
-    - HashMap + HashSet -> nameTokenIndex (for search)
-    - HashMap + HashSet -> courseToInstructorIds (reverse mapping)
+## Building and Testing
 
-### Directory Structure
-
-```text
-
-
+```bash
+mvn clean compile
+mvn test
 ```

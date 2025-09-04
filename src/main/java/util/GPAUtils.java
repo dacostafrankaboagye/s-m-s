@@ -1,5 +1,11 @@
 package util;
 
+import model.Enrollment;
+import model.EnrollmentStatus;
+import model.GradeType;
+
+import java.util.Map;
+
 /**
  * Utility class for GPA calculation and grade conversion.
  *
@@ -9,13 +15,10 @@ package util;
  */
 public final class GPAUtils {
 
-    private GPAUtils(){}
+    private GPAUtils() {}
 
     /**
      * Converts a numeric grade (0-100) to GPA on a 4.0 scale.
-     *
-     * @param numericGrade the numeric grade (0-100)
-     * @return GPA value (0.0 - 4.0)
      */
     public static double numericToGpa(double numericGrade) {
         if (numericGrade >= 90) return 4.0;
@@ -24,38 +27,27 @@ public final class GPAUtils {
         if (numericGrade >= 60) return 1.0;
         return 0.0;
     }
+
     /**
-     * Converts a letter grade to GPA points.
+     * Computes GPA for a single course enrollment.
+     * Assumes grades are numeric values.
      *
-     * @param letterGrade the letter grade (A, B, C, D, F)
-     * @return GPA value (0.0 - 4.0)
+     * @param enrollment the enrollment record
+     * @return GPA points for this course, or 0 if not completed
      */
-    public static double letterToGpa(String letterGrade) {
-        return switch (letterGrade.toUpperCase()) {
-            case "A" -> 4.0;
-            case "B" -> 3.0;
-            case "C" -> 2.0;
-            case "D" -> 1.0;
-            default -> 0.0; // F or invalid
-        };
-    }
-    
-    /**
-     * Converts a stored grade value (could be numeric or letter) to GPA points.
-     * If the grade is numeric, it applies numeric conversion.
-     * If the grade is a letter (A, B, C, D, F), it applies letter conversion.
-     *
-     * @param grade the grade string
-     * @return GPA value
-     */
-    public static double gradeToPoints(String grade) {
-        try {
-            // Try numeric first
-            double numeric = Double.parseDouble(grade);
-            return numericToGpa(numeric);
-        } catch (NumberFormatException e) {
-            // Fallback to letter-based
-            return letterToGpa(grade);
+    public static double computeCourseGpa(Enrollment enrollment) {
+        if (enrollment.getStatus() != EnrollmentStatus.COMPLETED) {
+            return 0.0; // Ignore incomplete courses
         }
+
+        Map<GradeType, Double> grades = enrollment.getGrades();
+        if (grades.isEmpty()) return 0.0;
+
+        double total = 0;
+        for (Double score : grades.values()) {
+            total += score;
+        }
+        double average = total / grades.size();
+        return numericToGpa(average);
     }
 }

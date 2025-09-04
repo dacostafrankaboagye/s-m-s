@@ -29,10 +29,4 @@ public class DepartmentServiceImpl implements DepartmentService{
     public List<Department> listAllDepartments() {
         return new ArrayList<>(departmentRepository.listAll());
     }
-
-    @Override
-    public void deleteDepartment(String id) {
-        departmentRepository.deleteDepartment(id);
-
-    }
 }
