@@ -6,7 +6,7 @@ An in-memory Student Management System demonstrating extensive use of Java Colle
 
 ## Current Implementation Status
 
-### ✅ Implemented Components
+### Implemented Components
 
 #### Models
 - **Student** - Student records with enrollments and attributes
@@ -37,11 +37,124 @@ An in-memory Student Management System demonstrating extensive use of Java Colle
 - **GPAUtils** - GPA calculation and grade conversion
 - **StringUtils** - String tokenization for search
 
-#### Tests
-- ✅ Complete unit tests for all model classes
-- ✅ Complete unit tests for all repository implementations
-- ✅ Complete unit tests for utility classes (GPAUtils, StringUtils)
-- ❌ Missing: Service layer tests
+## Architecture Layers
+
+```mermaid
+graph TB
+    subgraph "Service Layer"
+        SS[StudentService]
+        CS[CourseService]
+        ES[EnrollmentService]
+        DS[DepartmentService]
+    end
+    
+    subgraph "Repository Layer"
+        SR[StudentRepository]
+        CR[CourseRepository]
+        ER[EnrollmentRepository]
+        DR[DepartmentRepository]
+        NR[NotificationRepository]
+        IR[InstructorRepository]
+    end
+    
+    subgraph "Model Layer"
+        STUDENT[Student]
+        COURSE[Course]
+        ENROLLMENT[Enrollment]
+        DEPARTMENT[Department]
+        INSTRUCTOR[Instructor]
+        NOTIFICATION[Notification]
+        TIMESLOT[TimeSlot]
+    end
+    
+    subgraph "Utility Layer"
+        GPAUTILS[GPAUtils]
+        STRINGUTILS[StringUtils]
+    end
+    
+    SS --> SR
+    CS --> CR
+    ES --> ER
+    DS --> DR
+    
+    SR --> STUDENT
+    CR --> COURSE
+    ER --> ENROLLMENT
+    DR --> DEPARTMENT
+    NR --> NOTIFICATION
+    IR --> INSTRUCTOR
+    
+    SS --> GPAUTILS
+    SS --> STRINGUTILS
+    ES --> GPAUTILS
+```
+
+
+
+## Detailed Entity Relationships
+
+```mermaid
+erDiagram
+    STUDENT ||--o{ ENROLLMENT : "enrolls in"
+    COURSE ||--o{ ENROLLMENT : "has students"
+    DEPARTMENT ||--o{ COURSE : "offers"
+    INSTRUCTOR ||--o{ COURSE : "teaches"
+    COURSE ||--o{ TIMESLOT : "scheduled at"
+    COURSE ||--o{ COURSE : "has prerequisites"
+    NOTIFICATION }o--|| STUDENT : "sent to"
+    NOTIFICATION }o--|| INSTRUCTOR : "sent to"
+    
+    STUDENT {
+        string id PK
+        string fullName
+        string email
+        string phone
+        map attributes
+    }
+    
+    COURSE {
+        string code PK
+        string title
+        int credits
+        string department FK
+        set prerequisites
+    }
+    
+    ENROLLMENT {
+        string studentId FK
+        string courseCode FK
+        string semester
+        EnrollmentStatus status
+        map grades
+        BitSet attendance
+    }
+    
+    DEPARTMENT {
+        string id PK
+        string name
+        set courses
+    }
+    
+    INSTRUCTOR {
+        string id PK
+        string name
+        set coursesTaught
+    }
+    
+    NOTIFICATION {
+        string id PK
+        string recipientId FK
+        string message
+        LocalDateTime scheduledTime
+        boolean sent
+    }
+    
+    TIMESLOT {
+        DayOfWeek dayOfWeek
+        LocalTime startTime
+        LocalTime endTime
+    }
+```
 
 ### 🔧 Key Collections Framework Usage
 
@@ -54,7 +167,7 @@ An in-memory Student Management System demonstrating extensive use of Java Colle
 - **CopyOnWriteArrayList** - Read-heavy enrollment lists
 - **Collections.synchronizedSet** - Thread-safe department ID sets
 
-### 📁 Project Structure
+### Project Structure
 
 ```
 src/main/java/
@@ -67,10 +180,10 @@ src/main/java/
 └── util/           # Utility classes (GPAUtils, StringUtils)
 
 src/test/java/
-├── model/          # Model unit tests ✅
-├── repository/     # Repository unit tests ✅
-├── service/        # Service unit tests ✅
-└── util/           # Utility unit tests ✅
+├── model/          # Model unit tests
+├── repository/     # Repository unit tests 
+├── service/        # Service unit tests 
+└── util/           # Utility unit tests 
 ```
 
 ### 🎯 Core Features
@@ -90,10 +203,3 @@ src/test/java/
 - **Lombok** - Boilerplate code reduction
 - **JUnit 5** - Unit testing
 - **AssertJ** - Fluent assertions
-
-## Building and Testing
-
-```bash
-mvn clean compile
-mvn test
-```
