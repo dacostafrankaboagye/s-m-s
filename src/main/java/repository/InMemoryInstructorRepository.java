@@ -96,6 +96,8 @@ public class InMemoryInstructorRepository implements InstructorRepository{
     @Override
     public synchronized void deleteInstructor(String id) {
         Instructor instructor = instructorsById.remove(id);
+        if (instructor == null) return;
+
         for (String token : tokenize(instructor.getName())) {
             Set<String> ids = nameTokenIndex.get(token.toLowerCase());
             if (ids != null) {
