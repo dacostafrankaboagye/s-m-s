@@ -108,6 +108,12 @@ The core implementation must **demonstrate use of the Java Collections Framework
       InMemoryCourseRepository.java
       EnrollmentRepository.java
       InMemoryEnrollmentRepository.java
+      DepartmentRepository.java
+      InMemoryDepartmentRepository.java
+      InstructorRepository.java
+      InMemoryInstructorRepository.java
+      NotificationRepository.java
+      InMemoryNotificationRepository.java
     /service
       StudentService.java
       CourseService.java
