@@ -99,45 +99,5 @@ The core implementation must **demonstrate use of the Java Collections Framework
 
 ```text
 
-/sms-project
-  /src/main/java/
-    /model
-      Student.java
-      Course.java
-      Enrollment.java
-      Instructor.java
-      Department.java
-      TimeSlot.java
-      Notification.java
-    /repository
-      StudentRepository.java
-      InMemoryStudentRepository.java
-      CourseRepository.java
-      InMemoryCourseRepository.java
-      EnrollmentRepository.java
-      InMemoryEnrollmentRepository.java
-      DepartmentRepository.java
-      InMemoryDepartmentRepository.java
-      InstructorRepository.java
-      InMemoryInstructorRepository.java
-      NotificationRepository.java
-      InMemoryNotificationRepository.java
-    /service
-      StudentService.java
-      CourseService.java
-      EnrollmentService.java
-      ReportService.java
-      SchedulerService.java
-    /api
-      RestController (or CLI) classes
-    /util
-      CsvImporter.java
-      CsvExporter.java
-      GPAUtils.java
-      SearchUtils.java
-    /jobs
-      Job.java
-      JobWorker.java
-  /src/test/java/...
-  pom.xml
+
 ```
