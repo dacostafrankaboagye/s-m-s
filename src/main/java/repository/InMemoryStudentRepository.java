@@ -131,4 +131,14 @@ public class InMemoryStudentRepository implements StudentRepository{
             }
         }
     }
+
+    @Override
+    public Map<String,?> getInMemoryStudentRepo(){
+        return Map.of(
+                "studentsById", studentsById,
+                "emailToId", emailToId,
+                "nameTokenIndex", nameTokenIndex
+
+        );
+    }
 }

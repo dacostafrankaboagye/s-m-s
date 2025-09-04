@@ -3,6 +3,7 @@ package repository;
 import model.Student;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Repository interface for managing Student entities.
