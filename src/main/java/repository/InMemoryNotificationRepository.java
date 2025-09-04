@@ -35,7 +35,8 @@ public class InMemoryNotificationRepository implements NotificationRepository{
     @Override
     public synchronized void addNotification(@NonNull Notification notification) {
         String notificationId = notification.getId();
-        notificationsById.putIfAbsent(notificationId, notification);
+        if(notificationsById.containsKey(notificationId)){return;}
+        notificationsById.put(notificationId, notification);
 
         String recipientId = notification.getRecipientId();
         notificationsByRecipient
