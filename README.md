@@ -90,6 +90,10 @@ The core implementation must **demonstrate use of the Java Collections Framework
     - ConcurrentHashMap -> Fast concurrent reads/writes for departmentsById. 
     - TreeSet ->  Maintains sorted department IDs for listAll() without extra sorting. 
     - SynchronizedSet wrapper ->  Ensures thread safety for departmentIds.
+  - `InstructorRepository`
+    - ConcurrentHashMap -> instructorsById (thread-safe ID lookups)
+    - HashMap + HashSet -> nameTokenIndex (for search)
+    - HashMap + HashSet -> courseToInstructorIds (reverse mapping)
 
 ### Directory Structure
 

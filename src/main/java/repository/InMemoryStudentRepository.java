@@ -5,6 +5,8 @@ import model.Student;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static util.StringUtils.tokenize;
+
 /**
  * In-memory implementation of the StudentRepository interface.
  *
@@ -128,16 +130,5 @@ public class InMemoryStudentRepository implements StudentRepository{
                 }
             }
         }
-    }
-
-    /**
-     * Splits the full name into tokens based on whitespace.
-     * Example: "John Doe" -> ["John", "Doe"]
-     *
-     * @param fullName the full name of the student.
-     * @return a list of name tokens.
-     */
-    private List<String> tokenize(String fullName) {
-        return Arrays.asList(fullName.split("\\s+"));
     }
 }
